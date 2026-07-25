@@ -1,0 +1,69 @@
+// =============================================================
+// Anganwadi Child Nutrition & Growth Monitoring
+// ER Diagram — paste at https://dbdiagram.io to render
+// =============================================================
+
+Table anganwadi_centre {
+  centre_id   INTEGER [pk, increment, note: "Surrogate primary key"]
+  name        TEXT    [not null]
+  village     TEXT    [not null]
+  district    TEXT    [not null]
+  state       TEXT    [not null, default: "Tamil Nadu"]
+  created_at  TEXT    [not null, default: "CURRENT_DATE"]
+}
+
+Table worker {
+  worker_id   INTEGER [pk, increment]
+  centre_id   INTEGER [not null, ref: > anganwadi_centre.centre_id]
+  full_name   TEXT    [not null]
+  phone       TEXT
+  active      INTEGER [not null, default: 1, note: "0 or 1"]
+  joined_on   TEXT    [not null, note: "Cannot be a future date"]
+}
+
+Table child {
+  child_id      INTEGER [pk, increment]
+  centre_id     INTEGER [not null, ref: > anganwadi_centre.centre_id]
+  full_name     TEXT    [not null]
+  date_of_birth TEXT    [not null, note: "Cannot be a future date"]
+  sex           TEXT    [not null, note: "M or F"]
+  guardian      TEXT    [not null]
+  enrolled_on   TEXT    [not null]
+}
+
+// History table: one immutable row per monthly visit
+Table growth_measurement {
+  measurement_id INTEGER [pk, increment]
+  child_id       INTEGER [not null, ref: > child.child_id]
+  worker_id      INTEGER [not null, ref: > worker.worker_id]
+  measured_on    TEXT    [not null, note: "Cannot be a future date"]
+  weight_kg      REAL    [not null, note: "> 0 and < 100"]
+  height_cm      REAL    [note: "Optional, > 0"]
+  muac_cm        REAL    [note: "Mid-upper arm circumference, optional"]
+  notes          TEXT
+
+  indexes {
+    (child_id, measured_on) [unique, name: "uq_child_visit"]
+  }
+}
+
+// Derived status — stored for audit trail, never overwritten
+Table nutrition_status {
+  status_id      INTEGER [pk, increment]
+  measurement_id INTEGER [not null, unique, ref: - growth_measurement.measurement_id]
+  status         TEXT    [not null, note: "Normal | MAM | SAM"]
+  waz_score      REAL    [note: "Weight-for-Age Z-score"]
+  determined_by  TEXT    [not null, default: "system", note: "system or worker"]
+  determined_at  TEXT    [not null, default: "CURRENT_TIMESTAMP"]
+}
+
+// Referral: a business event, independent of measurements
+Table referral {
+  referral_id INTEGER [pk, increment]
+  child_id    INTEGER [not null, ref: > child.child_id]
+  raised_by   INTEGER [not null, ref: > worker.worker_id]
+  raised_on   TEXT    [not null]
+  reason      TEXT    [not null]
+  resolved_on TEXT    [note: "NULL = still open"]
+  outcome     TEXT
+}

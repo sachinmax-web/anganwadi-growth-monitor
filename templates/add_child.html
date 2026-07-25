@@ -1,0 +1,355 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <!-- ========================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="mb-1">
+                Add New Child
+            </h2>
+
+            <p class="text-muted mb-0">
+                Register a new child in the Anganwadi center
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('children') }}"
+            class="btn btn-outline-secondary"
+        >
+            ← Back to Children
+        </a>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- ADD CHILD FORM -->
+    <!-- ========================================= -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form
+                method="POST"
+                action="{{ url_for('add_child') }}"
+            >
+
+                <div class="row g-4">
+
+
+                    <!-- ================================= -->
+                    <!-- CHILD NAME -->
+                    <!-- ================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Child Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="child_name"
+                            class="form-control"
+                            placeholder="Enter child's full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- ================================= -->
+                    <!-- DATE OF BIRTH -->
+                    <!-- ================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Date of Birth
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date_of_birth"
+                            class="form-control"
+                            max="{{ today }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- ================================= -->
+                    <!-- ANGANWADI CENTRE -->
+                    <!-- ================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Anganwadi Centre
+                        </label>
+
+                        <select
+                            name="centre_id"
+                            class="form-select"
+                            required
+                        >
+
+                            <option value="">
+                                Select Centre
+                            </option>
+
+                            {% for centre in centres %}
+
+                            <option
+                                value="{{ centre.centre_id }}"
+                            >
+                                {{ centre.name }}
+                                -
+                                {{ centre.village }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                  <!-- ================================= -->
+<!-- GENDER -->
+<!-- ================================= -->
+
+<div class="col-md-6">
+
+    <label class="form-label">
+        Gender
+    </label>
+
+    <select
+        name="gender"
+        class="form-select"
+        required
+    >
+
+        <option value="">
+            Select Gender
+        </option>
+
+        <option value="M">
+            Male
+        </option>
+
+        <option value="F">
+            Female
+        </option>
+
+    </select>
+
+</div>
+
+                    <!-- ================================= -->
+                    <!-- FATHER NAME -->
+                    <!-- ================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Father's Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="father_name"
+                            class="form-control"
+                            placeholder="Enter father's name"
+                        >
+
+                    </div>
+
+
+                    <!-- ================================= -->
+                    <!-- MOTHER NAME -->
+                    <!-- ================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Mother's Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="mother_name"
+                            class="form-control"
+                            placeholder="Enter mother's name"
+                        >
+
+                    </div>
+
+
+                    <!-- ================================= -->
+                    <!-- PARENT CONTACT -->
+                    <!-- ================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Parent Contact Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            name="parent_contact"
+                            class="form-control"
+                            placeholder="Enter contact number"
+                        >
+
+                    </div>
+
+
+                    <!-- ================================= -->
+                    <!-- WEIGHT -->
+                    <!-- ================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Weight (kg)
+                        </label>
+
+                        <input
+                            type="number"
+                            name="weight"
+                            class="form-control"
+                            step="0.1"
+                            min="0"
+                            placeholder="Enter weight"
+                        >
+
+                    </div>
+
+
+                    <!-- ================================= -->
+                    <!-- HEIGHT -->
+                    <!-- ================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Height (cm)
+                        </label>
+
+                        <input
+                            type="number"
+                            name="height"
+                            class="form-control"
+                            step="0.1"
+                            min="0"
+                            placeholder="Enter height"
+                        >
+
+                    </div>
+
+
+                    <!-- ================================= -->
+                    <!-- VACCINATION STATUS -->
+                    <!-- ================================= -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Vaccination Status
+                        </label>
+
+                        <select
+                            name="vaccination_status"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                Select Status
+                            </option>
+
+                            <option value="Completed">
+                                Completed
+                            </option>
+
+                            <option value="Pending">
+                                Pending
+                            </option>
+
+                            <option value="Partially Completed">
+                                Partially Completed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ================================= -->
+                    <!-- ADDRESS -->
+                    <!-- ================================= -->
+
+                    <div class="col-12">
+
+                        <label class="form-label">
+                            Address
+                        </label>
+
+                        <textarea
+                            name="address"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Enter child's address"
+                        ></textarea>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- BUTTONS -->
+                <!-- ================================= -->
+
+                <div class="mt-4 d-flex gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary px-4"
+                    >
+                        💾 Save Child
+                    </button>
+
+
+                    <a
+                        href="{{ url_for('children') }}"
+                        class="btn btn-light px-4"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

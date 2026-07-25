@@ -1,0 +1,22 @@
+# Environment & secrets
+.env
+
+# Database (generated at runtime)
+*.db
+*.sqlite
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# ML artifacts
+ml/model.pkl
+
+# OS
+.DS_Store
+Thumbs.db

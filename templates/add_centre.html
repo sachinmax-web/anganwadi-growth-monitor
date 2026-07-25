@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Centre — Anganwadi Growth Monitor
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+  <h4 class="fw-bold">
+    <i class="bi bi-building-add text-primary"></i>
+    Add New Anganwadi Centre
+  </h4>
+
+  <a href="{{ url_for('centres') }}"
+     class="btn btn-outline-secondary btn-sm">
+
+    <i class="bi bi-arrow-left"></i>
+    Back
+
+  </a>
+
+</div>
+
+
+<div class="card shadow-sm p-4"
+     style="max-width: 600px;">
+
+  <form method="POST">
+
+    <!-- Centre Name -->
+    <div class="mb-3">
+
+      <label class="form-label fw-semibold">
+        Centre Name
+      </label>
+
+      <input
+        type="text"
+        name="name"
+        class="form-control"
+        placeholder="Enter centre name"
+        required
+      >
+
+    </div>
+
+
+    <!-- Village -->
+    <div class="mb-3">
+
+      <label class="form-label fw-semibold">
+        Village
+      </label>
+
+      <input
+        type="text"
+        name="village"
+        class="form-control"
+        placeholder="Enter village name"
+        required
+      >
+
+    </div>
+
+
+    <!-- District -->
+    <div class="mb-3">
+
+      <label class="form-label fw-semibold">
+        District
+      </label>
+
+      <input
+        type="text"
+        name="district"
+        class="form-control"
+        placeholder="Enter district name"
+        required
+      >
+
+    </div>
+
+
+    <!-- Submit -->
+
+    <button
+      type="submit"
+      class="btn btn-primary w-100">
+
+      <i class="bi bi-plus-circle"></i>
+      Add Centre
+
+    </button>
+
+  </form>
+
+</div>
+
+{% endblock %}

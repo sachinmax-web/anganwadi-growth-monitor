@@ -1,0 +1,668 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard — Anganwadi Growth Monitor
+{% endblock %}
+
+
+{% block content %}
+
+<!-- =========================================
+     DASHBOARD HEADER
+========================================= -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h3 class="fw-bold mb-1">
+            Dashboard
+        </h3>
+
+        <p class="text-muted mb-0">
+            Overview of child growth and nutrition monitoring
+        </p>
+
+    </div>
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="{{ url_for('add_measurement') }}"
+            class="btn btn-success"
+        >
+
+            <i class="bi bi-plus-circle me-1"></i>
+
+            Add Measurement
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     STAT CARDS
+========================================= -->
+
+<div class="row g-4 mb-4">
+
+
+    <!-- TOTAL CHILDREN -->
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card stat-card bg-primary text-white p-4">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <div class="small opacity-75 mb-2">
+                        Total Children
+                    </div>
+
+                    <div class="fs-2 fw-bold">
+                        {{ total_children }}
+                    </div>
+
+                    <div class="small mt-2">
+                        Registered children
+                    </div>
+
+                </div>
+
+                <div class="icon">
+
+                    <i class="bi bi-people-fill"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SAM -->
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card stat-card bg-danger text-white p-4">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <div class="small opacity-75 mb-2">
+                        Severe Risk
+                    </div>
+
+                    <div class="fs-2 fw-bold">
+                        {{ sam_count }}
+                    </div>
+
+                    <div class="small mt-2">
+                        SAM children
+                    </div>
+
+                </div>
+
+                <div class="icon">
+
+                    <i class="bi bi-exclamation-octagon-fill"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAM -->
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card stat-card bg-warning text-white p-4">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <div class="small opacity-75 mb-2">
+                        Moderate Risk
+                    </div>
+
+                    <div class="fs-2 fw-bold">
+                        {{ mam_count }}
+                    </div>
+
+                    <div class="small mt-2">
+                        MAM children
+                    </div>
+
+                </div>
+
+                <div class="icon">
+
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- NORMAL -->
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card stat-card bg-success text-white p-4">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <div class="small opacity-75 mb-2">
+                        Healthy Status
+                    </div>
+
+                    <div class="fs-2 fw-bold">
+                        {{ normal_count }}
+                    </div>
+
+                    <div class="small mt-2">
+                        Normal children
+                    </div>
+
+                </div>
+
+                <div class="icon">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+     SECONDARY STATISTICS
+========================================= -->
+
+<div class="row g-4 mb-4">
+
+
+    <!-- CENTRES -->
+
+    <div class="col-lg-4">
+
+        <div class="card p-4">
+
+            <div class="d-flex align-items-center">
+
+                <div
+                    class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center me-3"
+                    style="width:52px;height:52px;"
+                >
+
+                    <i class="bi bi-building-fill fs-4"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="text-muted small">
+                        Anganwadi Centres
+                    </div>
+
+                    <div class="fs-4 fw-bold">
+                        {{ total_centres }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- REFERRALS -->
+
+    <div class="col-lg-4">
+
+        <div class="card p-4">
+
+            <div class="d-flex align-items-center">
+
+                <div
+                    class="rounded-3 bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center me-3"
+                    style="width:52px;height:52px;"
+                >
+
+                    <i class="bi bi-clipboard2-pulse-fill fs-4"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="text-muted small">
+                        Open Referrals
+                    </div>
+
+                    <div class="fs-4 fw-bold">
+                        {{ open_referrals }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- WEIGHT LOSS -->
+
+    <div class="col-lg-4">
+
+        <div class="card p-4">
+
+            <div class="d-flex align-items-center">
+
+                <div
+                    class="rounded-3 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center me-3"
+                    style="width:52px;height:52px;"
+                >
+
+                    <i class="bi bi-arrow-down-circle-fill fs-4"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="text-muted small">
+                        Weight Loss Cases
+                    </div>
+
+                    <div class="fs-4 fw-bold">
+                        {{ weight_loss }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+     CHART + QUICK ACTIONS
+========================================= -->
+
+<div class="row g-4">
+
+
+    <!-- NUTRITION CHART -->
+
+    <div class="col-lg-6">
+
+        <div class="card p-4 h-100">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+                        Nutrition Status
+                    </h5>
+
+                    <small class="text-muted">
+                        Current child classification
+                    </small>
+
+                </div>
+
+                <i class="bi bi-pie-chart-fill text-primary fs-4"></i>
+
+            </div>
+
+            <div
+                style="
+                    height:280px;
+                    display:flex;
+                    justify-content:center;
+                "
+            >
+
+                <canvas id="statusChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="col-lg-6">
+
+        <div class="card p-4 h-100">
+
+            <div class="mb-3">
+
+                <h5 class="fw-bold mb-1">
+                    Quick Actions
+                </h5>
+
+                <small class="text-muted">
+                    Frequently used system functions
+                </small>
+
+            </div>
+
+
+            <div class="row g-3">
+
+
+                <!-- ALERTS -->
+
+                <div class="col-md-6">
+
+                    <a
+                        href="{{ url_for('alerts') }}"
+                        class="text-decoration-none"
+                    >
+
+                        <div
+                            class="p-3 rounded-3 border h-100"
+                            style="transition:0.2s;"
+                        >
+
+                            <i class="bi bi-exclamation-triangle-fill text-danger fs-3"></i>
+
+                            <div class="fw-semibold text-dark mt-2">
+                                View Alerts
+                            </div>
+
+                            <small class="text-muted">
+                                Check growth warnings
+                            </small>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- CHILDREN -->
+
+                <div class="col-md-6">
+
+                    <a
+                        href="{{ url_for('children') }}"
+                        class="text-decoration-none"
+                    >
+
+                        <div
+                            class="p-3 rounded-3 border h-100"
+                        >
+
+                            <i class="bi bi-people-fill text-primary fs-3"></i>
+
+                            <div class="fw-semibold text-dark mt-2">
+                                Manage Children
+                            </div>
+
+                            <small class="text-muted">
+                                View child records
+                            </small>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- REFERRALS -->
+
+                <div class="col-md-6">
+
+                    <a
+                        href="{{ url_for('referrals') }}"
+                        class="text-decoration-none"
+                    >
+
+                        <div
+                            class="p-3 rounded-3 border h-100"
+                        >
+
+                            <i class="bi bi-clipboard2-pulse-fill text-danger fs-3"></i>
+
+                            <div class="fw-semibold text-dark mt-2">
+                                Manage Referrals
+                            </div>
+
+                            <small class="text-muted">
+                                Track referral cases
+                            </small>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- ML -->
+
+                <div class="col-md-6">
+
+                    <a
+                        href="{{ url_for('predict') }}"
+                        class="text-decoration-none"
+                    >
+
+                        <div
+                            class="p-3 rounded-3 border h-100"
+                        >
+
+                            <i class="bi bi-robot text-info fs-3"></i>
+
+                            <div class="fw-semibold text-dark mt-2">
+                                ML Prediction
+                            </div>
+
+                            <small class="text-muted">
+                                Analyze referral risk
+                            </small>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+     SYSTEM SUMMARY
+========================================= -->
+
+<div class="card mt-4 p-4">
+
+    <div class="row align-items-center">
+
+
+        <div class="col-md-8">
+
+            <div class="d-flex align-items-center">
+
+                <div
+                    class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center me-3"
+                    style="width:48px;height:48px;"
+                >
+
+                    <i class="bi bi-shield-check fs-4"></i>
+
+                </div>
+
+                <div>
+
+                    <h6 class="fw-bold mb-1">
+                        Growth Monitoring System Active
+                    </h6>
+
+                    <p class="text-muted small mb-0">
+                        Child growth data is being monitored across
+                        {{ total_centres }} Anganwadi centre(s).
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+
+            <a
+                href="{{ url_for('centres') }}"
+                class="btn btn-outline-primary"
+            >
+
+                <i class="bi bi-building me-1"></i>
+
+                View Centres
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script>
+
+const ctx = document.getElementById("statusChart");
+
+new Chart(ctx, {
+
+    type: "doughnut",
+
+    data: {
+
+        labels: [
+            "Normal",
+            "MAM",
+            "SAM"
+        ],
+
+        datasets: [{
+
+            data: [
+
+                {{ normal_count }},
+
+                {{ mam_count }},
+
+                {{ sam_count }}
+
+            ],
+
+            backgroundColor: [
+
+                "#198754",
+
+                "#fd7e14",
+
+                "#dc3545"
+
+            ],
+
+            borderWidth: 3,
+
+            borderColor: "#ffffff"
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        cutout: "65%",
+
+        plugins: {
+
+            legend: {
+
+                position: "bottom",
+
+                labels: {
+
+                    padding: 20,
+
+                    usePointStyle: true
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

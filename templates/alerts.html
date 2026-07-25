@@ -1,0 +1,675 @@
+{% extends "base.html" %}
+
+{% block title %}
+Alerts — Anganwadi Growth Monitor
+{% endblock %}
+
+
+{% block content %}
+
+<!-- PAGE HEADER -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h3 class="fw-bold mb-1">
+
+            <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+
+            Growth Alerts
+
+        </h3>
+
+        <p class="text-muted mb-0">
+
+            Monitor children requiring immediate attention
+
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+     SAM ALERTS
+========================================= -->
+
+<div class="card border-0 shadow-sm mb-4">
+
+
+    <div class="card-header bg-danger text-white py-3">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h5 class="fw-bold mb-1">
+
+                    <i class="bi bi-exclamation-octagon-fill me-2"></i>
+
+                    Severe Acute Malnutrition
+
+                </h5>
+
+                <small>
+
+                    Immediate action required
+
+                </small>
+
+            </div>
+
+
+            <span class="badge bg-white text-danger fs-6">
+
+                {{ sam_children | length }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    {% if sam_children %}
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle mb-0">
+
+            <thead>
+
+                <tr>
+
+                    <th class="ps-4">Child</th>
+
+                    <th>Last Visit</th>
+
+                    <th>Weight</th>
+
+                    <th>MUAC</th>
+
+                    <th>WAZ</th>
+
+                    <th class="text-center">Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for c in sam_children %}
+
+                <tr>
+
+
+                    <td class="ps-4">
+
+                        <div class="d-flex align-items-center">
+
+                            <div
+                                class="rounded-circle bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center me-2"
+                                style="width:42px;height:42px;"
+                            >
+
+                                <i class="bi bi-person-fill"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="fw-bold">
+
+                                    {{ c.full_name }}
+
+                                </div>
+
+                                <small class="text-muted">
+
+                                    Child ID: #{{ c.child_id }}
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        {{ c.measured_on }}
+
+                    </td>
+
+
+                    <td>
+
+                        <strong>
+
+                            {{ c.weight_kg }}
+
+                        </strong>
+
+                        kg
+
+                    </td>
+
+
+                    <td>
+
+                        {% if c.muac_cm %}
+
+                            <span class="text-danger fw-bold">
+
+                                {{ c.muac_cm }} cm
+
+                            </span>
+
+                        {% else %}
+
+                            —
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ c.waz_score or '—' }}
+
+                    </td>
+
+
+                    <td class="text-center">
+
+                        <a
+                            href="{{ url_for('child_detail', child_id=c.child_id) }}"
+                            class="btn btn-sm btn-outline-primary me-1"
+                        >
+
+                            <i class="bi bi-eye"></i>
+
+                            View
+
+                        </a>
+
+
+                        <a
+    href="{{ url_for('add_referral') }}?child={{ c.child_id }}"
+    class="btn btn-sm btn-danger"
+>
+    <i class="bi bi-clipboard2-pulse"></i>
+    Refer
+</a>
+
+                    </td>
+
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% else %}
+
+    <div class="card-body text-center py-5">
+
+        <i class="bi bi-check-circle-fill text-success fs-1"></i>
+
+        <h6 class="fw-bold mt-3">
+
+            No SAM Children
+
+        </h6>
+
+        <p class="text-muted mb-0">
+
+            No children currently require severe malnutrition attention.
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+
+<!-- =========================================
+     WEIGHT LOSS ALERTS
+========================================= -->
+
+<div class="card border-0 shadow-sm mb-4">
+
+
+    <div class="card-header bg-warning py-3">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h5 class="fw-bold mb-1">
+
+                    <i class="bi bi-arrow-down-circle-fill me-2"></i>
+
+                    Weight Loss Alerts
+
+                </h5>
+
+                <small>
+
+                    Children who lost weight during their last visit
+
+                </small>
+
+            </div>
+
+
+            <span class="badge bg-dark fs-6">
+
+                {{ weight_loss | length }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    {% if weight_loss %}
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle mb-0">
+
+            <thead>
+
+                <tr>
+
+                    <th class="ps-4">Child</th>
+
+                    <th>Latest Visit</th>
+
+                    <th>Previous Weight</th>
+
+                    <th>Latest Weight</th>
+
+                    <th>Weight Change</th>
+
+                    <th>Status</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for c in weight_loss %}
+
+                <tr>
+
+
+                    <td class="ps-4">
+
+                        <div class="fw-bold">
+
+                            {{ c.full_name }}
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            ID: #{{ c.child_id }}
+
+                        </small>
+
+                    </td>
+
+
+                    <td>
+
+                        {{ c.latest_visit }}
+
+                    </td>
+
+
+                    <td>
+
+                        {{ c.prev_weight }} kg
+
+                    </td>
+
+
+                    <td>
+
+                        <strong>
+
+                            {{ c.latest_weight }} kg
+
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="text-danger fw-bold">
+
+                            <i class="bi bi-arrow-down"></i>
+
+                            {{ c.change_kg }} kg
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        {% if c.status == 'SAM' %}
+
+                        <span class="badge bg-danger">
+
+                            SAM
+
+                        </span>
+
+                        {% elif c.status == 'MAM' %}
+
+                        <span class="badge bg-warning text-dark">
+
+                            MAM
+
+                        </span>
+
+                        {% elif c.status == 'Normal' %}
+
+                        <span class="badge bg-success">
+
+                            Normal
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-secondary">
+
+                            —
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        <a
+                            href="{{ url_for('child_detail', child_id=c.child_id) }}"
+                            class="btn btn-sm btn-outline-warning"
+                        >
+
+                            <i class="bi bi-eye"></i>
+
+                            View
+
+                        </a>
+
+                    </td>
+
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% else %}
+
+    <div class="card-body text-center py-5">
+
+        <i class="bi bi-check-circle-fill text-success fs-1"></i>
+
+        <h6 class="fw-bold mt-3">
+
+            No Weight Loss Detected
+
+        </h6>
+
+        <p class="text-muted mb-0">
+
+            All monitored children maintained or increased their weight.
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+
+<!-- =========================================
+     NO WEIGHT GAIN
+========================================= -->
+
+<div class="card border-0 shadow-sm">
+
+
+    <div class="card-header bg-secondary text-white py-3">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h5 class="fw-bold mb-1">
+
+                    <i class="bi bi-dash-circle-fill me-2"></i>
+
+                    No Weight Gain
+
+                </h5>
+
+                <small>
+
+                    Children with no gain across the last 3 visits
+
+                </small>
+
+            </div>
+
+
+            <span class="badge bg-white text-dark fs-6">
+
+                {{ no_gain | length }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    {% if no_gain %}
+
+    <div class="table-responsive">
+
+        <table class="table table-hover align-middle mb-0">
+
+            <thead>
+
+                <tr>
+
+                    <th class="ps-4">Child</th>
+
+                    <th>Visits Checked</th>
+
+                    <th>Total Weight Change</th>
+
+                    <th class="text-center">Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for c in no_gain %}
+
+                <tr>
+
+
+                    <td class="ps-4">
+
+                        <div class="d-flex align-items-center">
+
+                            <div
+                                class="rounded-circle bg-secondary bg-opacity-10 text-secondary d-flex align-items-center justify-content-center me-2"
+                                style="width:42px;height:42px;"
+                            >
+
+                                <i class="bi bi-person-fill"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="fw-bold">
+
+                                    {{ c.full_name }}
+
+                                </div>
+
+                                <small class="text-muted">
+
+                                    ID: #{{ c.child_id }}
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="badge bg-secondary">
+
+                            {{ c.visits }} Visits
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        {% if c.total_gain < 0 %}
+
+                        <span class="text-danger fw-bold">
+
+                            <i class="bi bi-arrow-down-circle me-1"></i>
+
+                            {{ c.total_gain }} kg
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="text-warning fw-bold">
+
+                            <i class="bi bi-dash-circle me-1"></i>
+
+                            {{ c.total_gain }} kg
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td class="text-center">
+
+                        <a
+                            href="{{ url_for('child_detail', child_id=c.child_id) }}"
+                            class="btn btn-sm btn-outline-secondary"
+                        >
+
+                            <i class="bi bi-eye me-1"></i>
+
+                            View Details
+
+                        </a>
+
+                    </td>
+
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% else %}
+
+    <div class="card-body text-center py-5">
+
+        <i class="bi bi-check-circle-fill text-success fs-1"></i>
+
+        <h6 class="fw-bold mt-3">
+
+            Healthy Growth Trend
+
+        </h6>
+
+        <p class="text-muted mb-0">
+
+            All monitored children are showing positive weight gain.
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+{% endblock %}

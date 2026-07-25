@@ -1,0 +1,56 @@
+name: CI — Build, Test & Lint
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install --no-cache-dir -r requirements.txt
+
+      - name: Run full integration pipeline
+        env:
+          DB_PATH: /tmp/anganwadi_ci.db
+        run: python main.py
+
+      - name: Verify model file was created
+        run: test -f ml/model.pkl && echo "model.pkl exists" || (echo "model.pkl missing" && exit 1)
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t anganwadi-growth-monitor:ci .
+
+      - name: Smoke-test Docker container
+        run: |
+          docker run --rm \
+            -e DB_PATH=/tmp/anganwadi_ci.db \
+            anganwadi-growth-monitor:ci \
+            python main.py

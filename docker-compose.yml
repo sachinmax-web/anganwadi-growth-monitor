@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    image: anganwadi-growth-monitor:latest
+    container_name: anganwadi_app
+    env_file:
+      - .env                       # placeholders — see .env.example
+    volumes:
+      - db_data:/app/data          # DB persists across runs
+    command: python main.py
+
+volumes:
+  db_data:

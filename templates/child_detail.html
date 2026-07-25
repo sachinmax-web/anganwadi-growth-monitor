@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ child.full_name }} — Child Details
+{% endblock %}
+
+
+{% block content %}
+
+<!-- இங்கிருந்து உன்னுடைய existing Child Details code முழுவதையும் வை -->
+
+<div class="container-fluid py-4">
+
+    <h2 class="fw-bold mb-4">
+        {{ child.full_name }}
+    </h2>
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white">
+            <h5 class="fw-bold mb-0">
+                <i class="bi bi-person-vcard text-primary me-2"></i>
+                Child Information
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <small class="text-muted">Centre</small>
+                    <div class="fw-semibold">
+                        {{ child.centre }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Gender</small>
+                    <div class="fw-semibold">
+                        {% if child.sex == 'M' %}
+                            Male
+                        {% else %}
+                            Female
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Date of Birth</small>
+                    <div class="fw-semibold">
+                        {{ child.date_of_birth }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Age</small>
+                    <div class="fw-semibold">
+                        {{ child.age_months }} months
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Father's Name</small>
+                    <div class="fw-semibold">
+                        {{ child.father_name or '—' }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Mother's Name</small>
+                    <div class="fw-semibold">
+                        {{ child.mother_name or '—' }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Parent Contact</small>
+                    <div class="fw-semibold">
+                        {{ child.parent_contact or '—' }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Guardian</small>
+                    <div class="fw-semibold">
+                        {{ child.guardian or '—' }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Vaccination Status</small>
+                    <div class="fw-semibold">
+                        {{ child.vaccination_status or '—' }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Enrolled On</small>
+                    <div class="fw-semibold">
+                        {{ child.enrolled_on }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <small class="text-muted">Address</small>
+                    <div class="fw-semibold">
+                        {{ child.address or 'Address not provided' }}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}  

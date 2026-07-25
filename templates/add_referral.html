@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}New Referral — Anganwadi Growth Monitor{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">
+            <i class="bi bi-clipboard2-pulse-fill text-danger me-2"></i>
+            Create New Referral
+        </h3>
+        <p class="text-muted mb-0">
+            Refer a child for medical or nutritional support
+        </p>
+    </div>
+
+    <a href="{{ url_for('referrals') }}"
+       class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>
+        Back
+    </a>
+</div>
+
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-7">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-header bg-danger text-white py-3">
+                <h5 class="mb-0 fw-bold">
+                    <i class="bi bi-file-medical me-2"></i>
+                    Referral Information
+                </h5>
+            </div>
+
+
+            <div class="card-body p-4">
+
+                <form method="POST">
+
+                    <!-- Child -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Select Child
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <select name="child_id"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                — Select Child —
+                            </option>
+
+                            {% for c in children %}
+
+                            <option value="{{ c.child_id }}">
+
+                                {{ c.full_name }}
+                                — ID #{{ c.child_id }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Worker -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Raised By
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <select name="worker_id"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                — Select Worker —
+                            </option>
+
+                            {% for w in workers %}
+
+                            <option value="{{ w.worker_id }}">
+
+                                {{ w.full_name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Date -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Referral Date
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <input type="date"
+                               name="raised_on"
+                               class="form-control"
+                               max="{{ today }}"
+                               required>
+
+                    </div>
+
+
+                    <!-- Reason -->
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Reason for Referral
+                            <span class="text-danger">*</span>
+                        </label>
+
+                        <textarea name="reason"
+                                  class="form-control"
+                                  rows="5"
+                                  placeholder="Enter the reason for referral..."
+                                  required></textarea>
+
+                        <div class="form-text">
+                            Mention nutritional concerns, weight loss,
+                            severe malnutrition, illness, or other reasons.
+                        </div>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+
+                    <div class="d-flex gap-2">
+
+                        <a href="{{ url_for('referrals') }}"
+                           class="btn btn-light border flex-fill">
+
+                            Cancel
+
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-danger flex-fill">
+
+                            <i class="bi bi-send-fill me-1"></i>
+
+                            Create Referral
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- Information -->
+
+        <div class="alert alert-warning mt-3">
+
+            <i class="bi bi-info-circle-fill me-2"></i>
+
+            <strong>Important:</strong>
+
+            Referral information should be entered accurately
+            and reviewed by the responsible Anganwadi worker.
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
